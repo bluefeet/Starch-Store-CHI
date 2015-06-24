@@ -1,0 +1,14 @@
+=pod
+
+=head1 NAME
+
+Web::Starch::Store::CHI - Abstract.
+
+=head1 DESCRIPTION
+
+=head1 STORE METHODS
+
+See L<Web::Starch::Store> for more documentation about the methods
+which all stores implement.
+
+=cut
