@@ -17,11 +17,60 @@ Web::Starch::Store::CHI - Session storage backend using CHI.
 
 =head1 DESCRIPTION
 
+This starch store uses CHI to set and get session data.
+
+=head1 CONSTRUCTOR
+
+The arguments to this class are automatically shifted into the
+L</chi> argument if the L</chi> argument is not specified. So,
+
+    Web::Starch::Store::CHI->new(
+        driver => 'Memory',
+        global => 0,
+    );
+
+Is the same as:
+
+    Web::Starch::Store::CHI->new(
+        chi => {
+            driver => 'Memory',
+            global => 0,
+        },
+    );
+
+Also, a method proxy array ref, as described in L</chi>, may
+be passed to C<new>.  The below is equivelent to the previous
+two examples:
+
+    package MyCHI;
+    sub get_chi {
+        my ($class) = @_;
+        return CHI->new( driver=>'Memory', global=>0 );
+    }
+    
+    Web::Starch::Store::CHI->new(
+        ['MyCHI', 'get_chi'],
+    );
+
 =head1 REQUIRED ARGUMENTS
 
 =head2 chi
 
-=head2 expires
+Either arguments for L<CHI>, a pre-made L<CHI> object, or an array
+ref containing a method proxy.
+
+When specifying the method proxy the array ref looks like:
+
+    [ $package, $method, @args ]
+
+When configuring starch from static configuration files using a
+method proxy is a good way to link your existing L<CHI> object
+constructor in with starch so that starch doesn't build its own.
+
+=head2 expiration
+
+An expiration to specify when L</set> is called.  See C<set> in
+L<CHI/Getting and setting> for possible values.
 
 =head1 STORE METHODS
 

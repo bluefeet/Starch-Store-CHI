@@ -17,6 +17,41 @@ Web::Starch::Store::CHI - Session storage backend using CHI.
 
 =head1 DESCRIPTION
 
+This starch store uses CHI to set and get session data.
+
+=head1 CONSTRUCTOR
+
+The arguments to this class are automatically shifted into the
+L</chi> argument if the L</chi> argument is not specified. So,
+
+    Web::Starch::Store::CHI->new(
+        driver => 'Memory',
+        global => 0,
+    );
+
+Is the same as:
+
+    Web::Starch::Store::CHI->new(
+        chi => {
+            driver => 'Memory',
+            global => 0,
+        },
+    );
+
+Also, a method proxy array ref, as described in L</chi>, may
+be passed to C<new>.  The below is equivelent to the previous
+two examples:
+
+    package MyCHI;
+    sub get_chi {
+        my ($class) = @_;
+        return CHI->new( driver=>'Memory', global=>0 );
+    }
+    
+    Web::Starch::Store::CHI->new(
+        ['MyCHI', 'get_chi'],
+    );
+
 =cut
 
 use CHI;
@@ -32,8 +67,11 @@ around BUILDARGS => sub{
     my $orig = shift;
     my $self = shift;
 
-    my $args = $self->$orig( @_ );
+    if (@_ == 1 and ref($_[0]) eq 'ARRAY') {
+        return { chi => $_[0] };
+    }
 
+    my $args = $self->$orig( @_ );
     $args = { chi => $args } if !exists $args->{chi};
 
     return $args;
@@ -43,6 +81,17 @@ around BUILDARGS => sub{
 
 =head2 chi
 
+Either arguments for L<CHI>, a pre-made L<CHI> object, or an array
+ref containing a method proxy.
+
+When specifying the method proxy the array ref looks like:
+
+    [ $package, $method, @args ]
+
+When configuring starch from static configuration files using a
+method proxy is a good way to link your existing L<CHI> object
+constructor in with starch so that starch doesn't build its own.
+
 =cut
 
 with qw(
@@ -51,7 +100,7 @@ with qw(
 
 has _chi_arg => (
     is       => 'ro',
-    isa      => HasMethods[ 'set', 'get', 'remove' ] | HashRef,
+    isa      => HasMethods[ 'set', 'get', 'remove' ] | ArrayRef | HashRef,
     init_arg => 'chi',
     required => 1,
 );
@@ -67,14 +116,22 @@ sub _build_chi {
     my $chi = $self->_chi_arg();
     return $chi if blessed $chi;
 
+    if (ref($chi) eq 'ARRAY') {
+        my ($package, $method, @args) = @$chi;
+        return $package->$method( @args );
+    }
+
     return CHI->new( %$chi );
 }
 
-=head2 expires
+=head2 expiration
+
+An expiration to specify when L</set> is called.  See C<set> in
+L<CHI/Getting and setting> for possible values.
 
 =cut
 
-has expires => (
+has expiration => (
     is => 'ro',
     isa => NonEmptySimpleStr | HashRef,
 );
@@ -88,11 +145,11 @@ which all stores implement.
 
 sub set {
     my ($self, $id, $data) = @_;
-    my $expires = $self->expires();
+    my $expiration = $self->expiration();
     $self->chi->set(
         $id,
         $data,
-        defined($expires) ? ($expires) : (),
+        defined($expiration) ? ($expiration) : (),
     );
 }
 
