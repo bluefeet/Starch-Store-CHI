@@ -2,7 +2,7 @@ package Web::Starch::Store::CHI;
 
 =head1 NAME
 
-Web::Starch::Store::CHI - Abstract.
+Web::Starch::Store::CHI - Session storage backend using CHI.
 
 =head1 DESCRIPTION
 
