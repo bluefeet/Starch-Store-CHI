@@ -4,7 +4,24 @@
 
 Web::Starch::Store::CHI - Session storage backend using CHI.
 
+=head1 SYNOPSIS
+
+    my $starch = Web::Starch->new(
+        store => {
+            class => '::CHI',
+            driver => 'File',
+            root_dir => '/path/to/root',
+        },
+        ...,
+    );
+
 =head1 DESCRIPTION
+
+=head1 REQUIRED ARGUMENTS
+
+=head2 chi
+
+=head2 expires
 
 =head1 STORE METHODS
 
