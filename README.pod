@@ -9,8 +9,11 @@ Web::Starch::Store::CHI - Session storage backend using CHI.
     my $starch = Web::Starch->new(
         store => {
             class => '::CHI',
-            driver => 'File',
-            root_dir => '/path/to/root',
+            chi => {
+                driver => 'File',
+                root_dir => '/path/to/root',
+            },
+            expiration => 60 * 60 * 15, # 15 minutes
         },
         ...,
     );
@@ -66,6 +69,8 @@ When specifying the method proxy the array ref looks like:
 When configuring starch from static configuration files using a
 method proxy is a good way to link your existing L<CHI> object
 constructor in with starch so that starch doesn't build its own.
+
+=head1 OPTIONAL ARGUMENTS
 
 =head2 expiration
 

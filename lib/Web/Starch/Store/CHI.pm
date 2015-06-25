@@ -9,8 +9,11 @@ Web::Starch::Store::CHI - Session storage backend using CHI.
     my $starch = Web::Starch->new(
         store => {
             class => '::CHI',
-            driver => 'File',
-            root_dir => '/path/to/root',
+            chi => {
+                driver => 'File',
+                root_dir => '/path/to/root',
+            },
+            expiration => 60 * 60 * 15, # 15 minutes
         },
         ...,
     );
@@ -123,6 +126,8 @@ sub _build_chi {
 
     return CHI->new( %$chi );
 }
+
+=head1 OPTIONAL ARGUMENTS
 
 =head2 expiration
 
