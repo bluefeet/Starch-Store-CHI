@@ -9,12 +9,10 @@ Web::Starch::Store::CHI - Session storage backend using CHI.
     my $starch = Web::Starch->new(
         store => {
             class => '::CHI',
-            chi => {
-                driver => 'File',
-                root_dir => '/path/to/root',
-            },
-            expiration => 60 * 60 * 15, # 15 minutes
+            driver => 'File',
+            root_dir => '/path/to/root',
         },
+        expires => 60 * 60 * 15, # 15 minutes
         ...,
     );
 
@@ -27,40 +25,45 @@ This starch store uses CHI to set and get session data.
 The arguments to this class are automatically shifted into the
 L</chi> argument if the L</chi> argument is not specified. So,
 
-    Web::Starch::Store::CHI->new(
+    store => {
+        class  => '::CHI',
         driver => 'Memory',
         global => 0,
-    );
+        expires => 10 * 60, # 10 minutes
+    },
 
 Is the same as:
 
-    Web::Starch::Store::CHI->new(
+    store => {
+        class  => '::CHI',
         chi => {
             driver => 'Memory',
             global => 0,
         },
-    );
+        expires => 10 * 60, # 10 minutes
+    },
 
 Also, a method proxy array ref, as described in L</chi>, may
-be passed to C<new>.  The below is equivelent to the previous
-two examples:
+be passed.  The below is equivelent to the previous two examples:
 
     package MyCHI;
     sub get_chi {
         my ($class) = @_;
         return CHI->new( driver=>'Memory', global=>0 );
     }
-    
-    Web::Starch::Store::CHI->new(
-        ['MyCHI', 'get_chi'],
-    );
+
+    store => {
+        class  => '::CHI',
+        chi => ['MyCHI', 'get_chi'],
+        expires => 10 * 60, # 10 minutes
+    },
 
 =head1 REQUIRED ARGUMENTS
 
 =head2 chi
 
-Either arguments for L<CHI>, a pre-made L<CHI> object, or an array
-ref containing a method proxy.
+This must be set to either hash ref arguments for L<CHI> or an array ref
+containing a method proxy.
 
 When specifying the method proxy the array ref looks like:
 
@@ -69,13 +72,6 @@ When specifying the method proxy the array ref looks like:
 When configuring starch from static configuration files using a
 method proxy is a good way to link your existing L<CHI> object
 constructor in with starch so that starch doesn't build its own.
-
-=head1 OPTIONAL ARGUMENTS
-
-=head2 expiration
-
-An expiration to specify when L</set> is called.  See C<set> in
-L<CHI/Getting and setting> for possible values.
 
 =head1 STORE METHODS
 

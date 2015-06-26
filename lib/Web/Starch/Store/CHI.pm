@@ -9,12 +9,10 @@ Web::Starch::Store::CHI - Session storage backend using CHI.
     my $starch = Web::Starch->new(
         store => {
             class => '::CHI',
-            chi => {
-                driver => 'File',
-                root_dir => '/path/to/root',
-            },
-            expiration => 60 * 60 * 15, # 15 minutes
+            driver => 'File',
+            root_dir => '/path/to/root',
         },
+        expires => 60 * 60 * 15, # 15 minutes
         ...,
     );
 
@@ -27,33 +25,38 @@ This starch store uses CHI to set and get session data.
 The arguments to this class are automatically shifted into the
 L</chi> argument if the L</chi> argument is not specified. So,
 
-    Web::Starch::Store::CHI->new(
+    store => {
+        class  => '::CHI',
         driver => 'Memory',
         global => 0,
-    );
+        expires => 10 * 60, # 10 minutes
+    },
 
 Is the same as:
 
-    Web::Starch::Store::CHI->new(
+    store => {
+        class  => '::CHI',
         chi => {
             driver => 'Memory',
             global => 0,
         },
-    );
+        expires => 10 * 60, # 10 minutes
+    },
 
 Also, a method proxy array ref, as described in L</chi>, may
-be passed to C<new>.  The below is equivelent to the previous
-two examples:
+be passed.  The below is equivelent to the previous two examples:
 
     package MyCHI;
     sub get_chi {
         my ($class) = @_;
         return CHI->new( driver=>'Memory', global=>0 );
     }
-    
-    Web::Starch::Store::CHI->new(
-        ['MyCHI', 'get_chi'],
-    );
+
+    store => {
+        class  => '::CHI',
+        chi => ['MyCHI', 'get_chi'],
+        expires => 10 * 60, # 10 minutes
+    },
 
 =cut
 
@@ -61,21 +64,27 @@ use CHI;
 use Types::Standard -types;
 use Types::Common::String -types;
 use Scalar::Util qw( blessed );
+use Module::RunTime qw( require_module );
 
 use Moo;
 use strictures 2;
 use namespace::clean;
 
+with qw(
+    Web::Starch::Store
+);
+
 around BUILDARGS => sub{
     my $orig = shift;
     my $self = shift;
 
-    if (@_ == 1 and ref($_[0]) eq 'ARRAY') {
-        return { chi => $_[0] };
-    }
-
     my $args = $self->$orig( @_ );
-    $args = { chi => $args } if !exists $args->{chi};
+    return $args if exists $args->{chi};
+
+    my $chi = $args;
+    $args = { chi=>$chi };
+    $args->{factory} = delete( $chi->{factory} );
+    $args->{expires} = delete( $chi->{expires} );
 
     return $args;
 };
@@ -84,8 +93,8 @@ around BUILDARGS => sub{
 
 =head2 chi
 
-Either arguments for L<CHI>, a pre-made L<CHI> object, or an array
-ref containing a method proxy.
+This must be set to either hash ref arguments for L<CHI> or an array ref
+containing a method proxy.
 
 When specifying the method proxy the array ref looks like:
 
@@ -97,49 +106,31 @@ constructor in with starch so that starch doesn't build its own.
 
 =cut
 
-with qw(
-    Web::Starch::Store
-);
-
 has _chi_arg => (
     is       => 'ro',
-    isa      => HasMethods[ 'set', 'get', 'remove' ] | ArrayRef | HashRef,
+    isa      => ArrayRef | HashRef,
     init_arg => 'chi',
     required => 1,
 );
 
 has chi => (
     is       => 'lazy',
-    isa      => HasMethods[ 'set', 'get', 'remove' ],
+    isa      => InstanceOf[ 'CHI::Driver' ],
     init_arg => undef,
 );
 sub _build_chi {
     my ($self) = @_;
 
     my $chi = $self->_chi_arg();
-    return $chi if blessed $chi;
 
     if (ref($chi) eq 'ARRAY') {
         my ($package, $method, @args) = @$chi;
+        require_module( $package );
         return $package->$method( @args );
     }
 
     return CHI->new( %$chi );
 }
-
-=head1 OPTIONAL ARGUMENTS
-
-=head2 expiration
-
-An expiration to specify when L</set> is called.  See C<set> in
-L<CHI/Getting and setting> for possible values.
-
-=cut
-
-has expiration => (
-    is => 'ro',
-    isa => NonEmptySimpleStr | HashRef,
-);
 
 =head1 STORE METHODS
 
@@ -150,11 +141,11 @@ which all stores implement.
 
 sub set {
     my ($self, $id, $data) = @_;
-    my $expiration = $self->expiration();
+    my $expires = $self->expires();
     $self->chi->set(
         $id,
         $data,
-        defined($expiration) ? ($expiration) : (),
+        defined($expires) ? ($expires) : (),
     );
 }
 

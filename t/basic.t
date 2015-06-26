@@ -3,12 +3,17 @@ use strictures 2;
 
 use Test::More;
 
-use Web::Starch::Store::CHI;
+use Web::Starch;
 
-my $store = Web::Starch::Store::CHI->new(
-    driver => 'Memory',
-    global => 0,
+my $starch = Web::Starch->new(
+    store => {
+        class  => '::CHI',
+        driver => 'Memory',
+        global => 0,
+    },
 );
+
+my $store = $starch->store();
 
 is( $store->get('foo'), undef, 'get an unknown key' );
 
