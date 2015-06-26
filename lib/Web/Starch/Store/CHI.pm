@@ -64,7 +64,7 @@ use CHI;
 use Types::Standard -types;
 use Types::Common::String -types;
 use Scalar::Util qw( blessed );
-use Module::RunTime qw( require_module );
+use Module::Runtime qw( require_module );
 
 use Moo;
 use strictures 2;
@@ -88,6 +88,15 @@ around BUILDARGS => sub{
 
     return $args;
 };
+
+sub BUILD {
+  my ($self) = @_;
+
+  # Get this loaded as early as possible.
+  $self->chi();
+
+  return;
+}
 
 =head1 REQUIRED ARGUMENTS
 
