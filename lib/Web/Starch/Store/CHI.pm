@@ -63,7 +63,7 @@ use Types::Common::String -types;
 use Scalar::Util qw( blessed );
 
 use Moo;
-use strictures 1;
+use strictures 2;
 use namespace::clean;
 
 around BUILDARGS => sub{
