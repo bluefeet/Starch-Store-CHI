@@ -18,7 +18,7 @@ Web::Starch::Store::CHI - Session storage backend using CHI.
 
 =head1 DESCRIPTION
 
-This starch store uses CHI to set and get session data.
+This Starch store uses CHI to set and get session data.
 
 =head1 CONSTRUCTOR
 
@@ -100,9 +100,9 @@ When specifying the method proxy the array ref looks like:
 
     [ $package, $method, @args ]
 
-When configuring starch from static configuration files using a
+When configuring Starch from static configuration files using a
 method proxy is a good way to link your existing L<CHI> object
-constructor in with starch so that starch doesn't build its own.
+constructor in with Starch so that starch doesn't build its own.
 
 =cut
 
