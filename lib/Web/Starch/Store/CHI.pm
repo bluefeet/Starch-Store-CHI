@@ -145,7 +145,7 @@ sub set {
     $self->chi->set(
         $id,
         $data,
-        defined($expires) ? ($expires) : (),
+        $expires ? ($expires) : (),
     );
 }
 
