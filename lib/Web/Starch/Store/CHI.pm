@@ -84,7 +84,7 @@ around BUILDARGS => sub{
     my $chi = $args;
     $args = { chi=>$chi };
     $args->{factory} = delete( $chi->{factory} );
-    $args->{expires} = delete( $chi->{expires} );
+    $args->{expires} = delete( $chi->{expires} ) if exists $chi->{expires};
 
     return $args;
 };
@@ -149,8 +149,7 @@ which all stores implement.
 =cut
 
 sub set {
-    my ($self, $id, $data) = @_;
-    my $expires = $self->expires();
+    my ($self, $id, $data, $expires) = @_;
     $self->chi->set(
         $id,
         $data,
