@@ -29,7 +29,6 @@ L</chi> argument if the L</chi> argument is not specified. So,
         class  => '::CHI',
         driver => 'Memory',
         global => 0,
-        expires => 10 * 60, # 10 minutes
     },
 
 Is the same as:
@@ -40,11 +39,11 @@ Is the same as:
             driver => 'Memory',
             global => 0,
         },
-        expires => 10 * 60, # 10 minutes
     },
 
-Also, a method proxy array ref, as described in L</chi>, may
-be passed.  The below is equivelent to the previous two examples:
+Also, don't forget about method proxies which allow you to build
+the L<CHI> object using your own code but still specify a static
+configuration.  The below is equivelent to the previous two examples:
 
     package MyCHI;
     sub get_chi {
@@ -54,17 +53,19 @@ be passed.  The below is equivelent to the previous two examples:
 
     store => {
         class  => '::CHI',
-        chi => ['MyCHI', 'get_chi'],
-        expires => 10 * 60, # 10 minutes
+        chi => [ '&proxy', 'MyCHI', 'get_chi' ],
     },
+
+You can read more about method proxies add
+L<Web::Starch::Manual/METHOD PROXIES>.
 
 =cut
 
 use CHI;
 use Types::Standard -types;
 use Types::Common::String -types;
-use Scalar::Util qw( blessed );
 use Module::Runtime qw( require_module );
+use Scalar::Util qw( blessed );
 
 use Moo;
 use strictures 2;
@@ -84,7 +85,7 @@ around BUILDARGS => sub{
     my $chi = $args;
     $args = { chi=>$chi };
     $args->{factory} = delete( $chi->{factory} );
-    $args->{expires} = delete( $chi->{expires} ) if exists $chi->{expires};
+    $args->{max_expires} = delete( $chi->{max_expires} ) if exists $chi->{max_expires};
 
     return $args;
 };
@@ -102,12 +103,8 @@ sub BUILD {
 
 =head2 chi
 
-This must be set to either hash ref arguments for L<CHI> or an array ref
-containing a method proxy.
-
-When specifying the method proxy the array ref looks like:
-
-    [ $package, $method, @args ]
+This must be set to either hash ref arguments for L<CHI> or a
+pre-built CHI object (often retrieved using a method proxy).
 
 When configuring Starch from static configuration files using a
 method proxy is a good way to link your existing L<CHI> object
@@ -117,7 +114,7 @@ constructor in with Starch so that starch doesn't build its own.
 
 has _chi_arg => (
     is       => 'ro',
-    isa      => ArrayRef | HashRef,
+    isa      => InstanceOf[ 'CHI' ] | HashRef,
     init_arg => 'chi',
     required => 1,
 );
@@ -131,12 +128,7 @@ sub _build_chi {
     my ($self) = @_;
 
     my $chi = $self->_chi_arg();
-
-    if (ref($chi) eq 'ARRAY') {
-        my ($package, $method, @args) = @$chi;
-        require_module( $package );
-        return $package->$method( @args );
-    }
+    return $chi if blessed $chi;
 
     return CHI->new( %$chi );
 }
