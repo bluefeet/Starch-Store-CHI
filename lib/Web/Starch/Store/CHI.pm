@@ -114,7 +114,7 @@ constructor in with Starch so that starch doesn't build its own.
 
 has _chi_arg => (
     is       => 'ro',
-    isa      => InstanceOf[ 'CHI' ] | HashRef,
+    isa      => InstanceOf[ 'CHI::Driver' ] | HashRef,
     init_arg => 'chi',
     required => 1,
 );
