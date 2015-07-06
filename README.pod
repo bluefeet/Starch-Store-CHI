@@ -18,7 +18,38 @@ Web::Starch::Store::CHI - Session storage backend using CHI.
 
 =head1 DESCRIPTION
 
-This Starch store uses CHI to set and get session data.
+This Starch store uses L<CHI> to set and get session data.
+
+=head1 PERFORMANCE
+
+When using CHI there are various choices you need to make:
+
+=over
+
+=item *
+
+Which backend to use?  If data persistance is not an issue, or
+you're using CHI as your outer store in L<Web::Starch::Store::Layered>
+then Memcached or Redis are common solutions which have high
+performance.
+
+=item *
+
+Which serializer to use?  Nowadays L<Sereal> is the serialization
+performance heavweight, with L<JSON::XS> coming up a close second.
+
+=item *
+
+Which driver to use?  Some backends have more than one driver, and
+some drivers perform better than others.  The most common example of
+this is Memcached which has three drivers which can be used with
+CHI.
+
+=back
+
+Make sure you ask these questions when you implement CHI for your
+sessions, and take the time to answer them well.  It can make a big
+difference.
 
 =head1 CONSTRUCTOR
 
