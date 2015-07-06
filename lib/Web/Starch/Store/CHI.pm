@@ -12,7 +12,6 @@ Web::Starch::Store::CHI - Session storage backend using CHI.
             driver => 'File',
             root_dir => '/path/to/root',
         },
-        expires => 60 * 60 * 15, # 15 minutes
         ...,
     );
 
@@ -87,7 +86,7 @@ configuration.  The below is equivelent to the previous two examples:
         chi => [ '&proxy', 'MyCHI', 'get_chi' ],
     },
 
-You can read more about method proxies add
+You can read more about method proxies at
 L<Web::Starch::Manual/METHOD PROXIES>.
 
 =cut
@@ -95,7 +94,6 @@ L<Web::Starch::Manual/METHOD PROXIES>.
 use CHI;
 use Types::Standard -types;
 use Types::Common::String -types;
-use Module::Runtime qw( require_module );
 use Scalar::Util qw( blessed );
 
 use Moo;
@@ -173,21 +171,28 @@ which all stores implement.
 
 sub set {
     my ($self, $id, $data, $expires) = @_;
+
     $self->chi->set(
         $id,
         $data,
         $expires ? ($expires) : (),
     );
+
+    return;
 }
 
 sub get {
     my ($self, $id) = @_;
+
     return $self->chi->get( $id );
 }
 
 sub remove {
     my ($self, $id) = @_;
-    return $self->chi->remove( $id );
+
+    $self->chi->remove( $id );
+
+    return;
 }
 
 1;

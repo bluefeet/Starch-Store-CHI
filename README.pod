@@ -12,7 +12,6 @@ Web::Starch::Store::CHI - Session storage backend using CHI.
             driver => 'File',
             root_dir => '/path/to/root',
         },
-        expires => 60 * 60 * 15, # 15 minutes
         ...,
     );
 
@@ -87,7 +86,7 @@ configuration.  The below is equivelent to the previous two examples:
         chi => [ '&proxy', 'MyCHI', 'get_chi' ],
     },
 
-You can read more about method proxies add
+You can read more about method proxies at
 L<Web::Starch::Manual/METHOD PROXIES>.
 
 =head1 REQUIRED ARGUMENTS
