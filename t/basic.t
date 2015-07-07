@@ -8,8 +8,10 @@ use Web::Starch;
 my $starch = Web::Starch->new(
     store => {
         class  => '::CHI',
-        driver => 'Memory',
-        global => 0,
+        chi => {
+            driver => 'Memory',
+            global => 0,
+        },
     },
 );
 

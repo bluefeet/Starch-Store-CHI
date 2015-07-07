@@ -9,8 +9,10 @@ Web::Starch::Store::CHI - Session storage backend using CHI.
     my $starch = Web::Starch->new(
         store => {
             class => '::CHI',
-            driver => 'File',
-            root_dir => '/path/to/root',
+            chi => {
+                driver => 'File',
+                root_dir => '/path/to/root',
+            },
         },
         ...,
     );
@@ -50,45 +52,6 @@ Make sure you ask these questions when you implement CHI for your
 sessions, and take the time to answer them well.  It can make a big
 difference.
 
-=head1 CONSTRUCTOR
-
-The arguments to this class are automatically shifted into the
-L</chi> argument if the L</chi> argument is not specified. So,
-
-    store => {
-        class  => '::CHI',
-        driver => 'Memory',
-        global => 0,
-    },
-
-Is the same as:
-
-    store => {
-        class  => '::CHI',
-        chi => {
-            driver => 'Memory',
-            global => 0,
-        },
-    },
-
-Also, don't forget about method proxies which allow you to build
-the L<CHI> object using your own code but still specify a static
-configuration.  The below is equivelent to the previous two examples:
-
-    package MyCHI;
-    sub get_chi {
-        my ($class) = @_;
-        return CHI->new( driver=>'Memory', global=>0 );
-    }
-
-    store => {
-        class  => '::CHI',
-        chi => [ '&proxy', 'MyCHI', 'get_chi' ],
-    },
-
-You can read more about method proxies at
-L<Web::Starch::Manual/METHOD PROXIES>.
-
 =cut
 
 use CHI;
@@ -103,21 +66,6 @@ use namespace::clean;
 with qw(
     Web::Starch::Store
 );
-
-around BUILDARGS => sub{
-    my $orig = shift;
-    my $self = shift;
-
-    my $args = $self->$orig( @_ );
-    return $args if exists $args->{chi};
-
-    my $chi = $args;
-    $args = { chi=>$chi };
-    $args->{factory} = delete( $chi->{factory} );
-    $args->{max_expires} = delete( $chi->{max_expires} ) if exists $chi->{max_expires};
-
-    return $args;
-};
 
 sub BUILD {
   my ($self) = @_;
