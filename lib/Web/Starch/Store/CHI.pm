@@ -118,10 +118,10 @@ which all stores implement.
 =cut
 
 sub set {
-    my ($self, $id, $data, $expires) = @_;
+    my ($self, $key, $data, $expires) = @_;
 
     $self->chi->set(
-        $id,
+        $key,
         $data,
         $expires ? ($expires) : (),
     );
@@ -130,15 +130,15 @@ sub set {
 }
 
 sub get {
-    my ($self, $id) = @_;
+    my ($self, $key) = @_;
 
-    return $self->chi->get( $id );
+    return $self->chi->get( $key );
 }
 
 sub remove {
-    my ($self, $id) = @_;
+    my ($self, $key) = @_;
 
-    $self->chi->remove( $id );
+    $self->chi->remove( $key );
 
     return;
 }

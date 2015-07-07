@@ -19,11 +19,11 @@ my $store = $starch->store();
 
 is( $store->get('foo'), undef, 'get an unknown key' );
 
-$store->set( 'foo', {bar=>6} );
+$store->set( 'foo', {bar=>6}, 10 );
 isnt( $store->get('foo'), undef, 'add, then get a known key' );
 is( $store->get('foo')->{bar}, 6, 'known key data value' );
 
-$store->set( 'foo', {bar=>3} );
+$store->set( 'foo', {bar=>3}, 20 );
 is( $store->get('foo')->{bar}, 3, 'update, then get a known key' );
 
 $store->remove( 'foo' );
