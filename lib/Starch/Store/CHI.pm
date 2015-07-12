@@ -1,12 +1,12 @@
-package Web::Starch::Store::CHI;
+package Starch::Store::CHI;
 
 =head1 NAME
 
-Web::Starch::Store::CHI - Session storage backend using CHI.
+Starch::Store::CHI - Session storage backend using CHI.
 
 =head1 SYNOPSIS
 
-    my $starch = Web::Starch->new(
+    my $starch = Starch->new(
         store => {
             class => '::CHI',
             chi => {
@@ -30,7 +30,7 @@ When using CHI there are various choices you need to make:
 =item *
 
 Which backend to use?  If data persistance is not an issue, or
-you're using CHI as your outer store in L<Web::Starch::Store::Layered>
+you're using CHI as your outer store in L<Starch::Store::Layered>
 then Memcached or Redis are common solutions which have high
 performance.
 
@@ -64,7 +64,7 @@ use strictures 2;
 use namespace::clean;
 
 with qw(
-    Web::Starch::Store
+    Starch::Store
 );
 
 sub BUILD {
@@ -84,7 +84,7 @@ This must be set to either hash ref arguments for L<CHI> or a
 pre-built CHI object (often retrieved using a method proxy).
 
 When configuring Starch from static configuration files using a
-L<method proxy|Web::Starch::Manual/METHOD PROXIES>
+L<method proxy|Starch::Manual/METHOD PROXIES>
 is a good way to link your existing L<CHI> object constructor
 in with Starch so that starch doesn't build its own.
 
@@ -115,15 +115,15 @@ sub _build_chi {
 
 =head2 set
 
-Set L<Web::Starch::Store/set>.
+Set L<Starch::Store/set>.
 
 =head2 get
 
-Set L<Web::Starch::Store/get>.
+Set L<Starch::Store/get>.
 
 =head2 remove
 
-Set L<Web::Starch::Store/remove>.
+Set L<Starch::Store/remove>.
 
 =cut
 
