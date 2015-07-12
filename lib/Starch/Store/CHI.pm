@@ -29,7 +29,7 @@ When using CHI there are various choices you need to make:
 
 =item *
 
-Which backend to use?  If data persistance is not an issue, or
+Which backend to use?  If data persistence is not an issue, or
 you're using CHI as your outer store in L<Starch::Store::Layered>
 then Memcached or Redis are common solutions which have high
 performance.
@@ -37,7 +37,7 @@ performance.
 =item *
 
 Which serializer to use?  Nowadays L<Sereal> is the serialization
-performance heavweight, with L<JSON::XS> coming up a close second.
+performance heavyweight, with L<JSON::XS> coming up a close second.
 
 =item *
 
