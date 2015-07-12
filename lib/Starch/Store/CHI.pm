@@ -128,10 +128,10 @@ Set L<Starch::Store/remove>.
 =cut
 
 sub set {
-    my ($self, $key, $data, $expires) = @_;
+    my ($self, $id, $namespace, $data, $expires) = @_;
 
     $self->chi->set(
-        $key,
+        $self->combine_keys( $id, $namespace ),
         $data,
         $expires ? ($expires) : (),
     );
@@ -140,15 +140,19 @@ sub set {
 }
 
 sub get {
-    my ($self, $key) = @_;
+    my ($self, $id, $namespace) = @_;
 
-    return $self->chi->get( $key );
+    return $self->chi->get(
+        $self->combine_keys( $id, $namespace ),
+    );
 }
 
 sub remove {
-    my ($self, $key) = @_;
+    my ($self, $id, $namespace) = @_;
 
-    $self->chi->remove( $key );
+    $self->chi->remove(
+        $self->combine_keys( $id, $namespace ),
+    );
 
     return;
 }
