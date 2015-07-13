@@ -5,13 +5,11 @@ use Test::More;
 use Test::Starch;
 
 Test::Starch->new(
-    args => {
-        store => {
-            class  => '::CHI',
-            chi => {
-                driver => 'Memory',
-                global => 0,
-            },
+    store => {
+        class  => '::CHI',
+        chi => {
+            driver => 'Memory',
+            global => 0,
         },
     },
 )->test();

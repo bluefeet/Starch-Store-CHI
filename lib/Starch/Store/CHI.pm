@@ -19,7 +19,7 @@ Starch::Store::CHI - Session storage backend using CHI.
 
 =head1 DESCRIPTION
 
-This Starch store uses L<CHI> to set and get session data.
+This L<Starch> store uses L<CHI> to set and get session data.
 
 =head1 PERFORMANCE
 
