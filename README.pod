@@ -2,7 +2,7 @@
 
 =head1 NAME
 
-Starch::Store::CHI - Session storage backend using CHI.
+Starch::Store::CHI - Starch storage backend using CHI.
 
 =head1 SYNOPSIS
 
@@ -19,7 +19,7 @@ Starch::Store::CHI - Session storage backend using CHI.
 
 =head1 DESCRIPTION
 
-This L<Starch> store uses L<CHI> to set and get session data.
+This L<Starch> store uses L<CHI> to set and get state data.
 
 =head1 PERFORMANCE
 
@@ -48,8 +48,8 @@ CHI.
 
 =back
 
-Make sure you ask these questions when you implement CHI for your
-sessions, and take the time to answer them well.  It can make a big
+Make sure you ask these questions when you implement CHI for
+Starch, and take the time to answer them well.  It can make a big
 difference.
 
 =head1 REQUIRED ARGUMENTS

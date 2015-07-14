@@ -2,7 +2,7 @@ package Starch::Store::CHI;
 
 =head1 NAME
 
-Starch::Store::CHI - Session storage backend using CHI.
+Starch::Store::CHI - Starch storage backend using CHI.
 
 =head1 SYNOPSIS
 
@@ -19,7 +19,7 @@ Starch::Store::CHI - Session storage backend using CHI.
 
 =head1 DESCRIPTION
 
-This L<Starch> store uses L<CHI> to set and get session data.
+This L<Starch> store uses L<CHI> to set and get state data.
 
 =head1 PERFORMANCE
 
@@ -48,8 +48,8 @@ CHI.
 
 =back
 
-Make sure you ask these questions when you implement CHI for your
-sessions, and take the time to answer them well.  It can make a big
+Make sure you ask these questions when you implement CHI for
+Starch, and take the time to answer them well.  It can make a big
 difference.
 
 =cut
@@ -131,7 +131,7 @@ sub set {
     my ($self, $id, $namespace, $data, $expires) = @_;
 
     $self->chi->set(
-        $self->combine_keys( $id, $namespace ),
+        $self->manager->stringify_key( $id, $namespace ),
         $data,
         $expires ? ($expires) : (),
     );
@@ -143,7 +143,7 @@ sub get {
     my ($self, $id, $namespace) = @_;
 
     return $self->chi->get(
-        $self->combine_keys( $id, $namespace ),
+        $self->manager->stringify_key( $id, $namespace ),
     );
 }
 
@@ -151,7 +151,7 @@ sub remove {
     my ($self, $id, $namespace) = @_;
 
     $self->chi->remove(
-        $self->combine_keys( $id, $namespace ),
+        $self->manager->stringify_key( $id, $namespace ),
     );
 
     return;
