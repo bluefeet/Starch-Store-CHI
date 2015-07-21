@@ -133,7 +133,7 @@ sub set {
     local $Carp::Interal{ (__PACKAGE__) } = 1;
 
     $self->chi->set(
-        $self->manager->stringify_key( $id, $namespace ),
+        $self->stringify_key( $id, $namespace ),
         $data,
         $expires ? ($expires) : (),
     );
@@ -147,7 +147,7 @@ sub get {
     local $Carp::Interal{ (__PACKAGE__) } = 1;
 
     return $self->chi->get(
-        $self->manager->stringify_key( $id, $namespace ),
+        $self->stringify_key( $id, $namespace ),
     );
 }
 
@@ -157,7 +157,7 @@ sub remove {
     local $Carp::Interal{ (__PACKAGE__) } = 1;
 
     $self->chi->remove(
-        $self->manager->stringify_key( $id, $namespace ),
+        $self->stringify_key( $id, $namespace ),
     );
 
     return;
