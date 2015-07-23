@@ -21,6 +21,23 @@ Starch::Store::CHI - Starch storage backend using CHI.
 
 This L<Starch> store uses L<CHI> to set and get state data.
 
+=head1 EXCEPTIONS
+
+By default L<CHI> will catch errors and log them using L<Log::Any>
+and keep on going as if nothing went wrong.  In Starch, stores are
+expected to loudly throw exceptions, so it is suggested that you
+specify these arguments to your CHI driver:
+
+    on_get_error => 'die',
+    on_set_error => 'die',
+
+And then, if you still want the errors logged, you can use
+L<Starch::Plugin::LogStoreExceptions>.  This is especially
+important if you are using the L<Starch::Plugin::TimeoutStore>
+plugin which will throw an exception when the timeout is exceeded
+which then CHI will catch and log by default, which is not what
+you want.
+
 =head1 PERFORMANCE
 
 When using CHI there are various choices you need to make:
