@@ -1,4 +1,4 @@
-requires 'Starch'           => 0.04;
+requires 'Starch'           => 0.05;
 requires 'CHI'              => 0.58;
 requires 'strictures'       => 2.000000;
 requires 'namespace::clean' => 0.24;

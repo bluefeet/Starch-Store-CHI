@@ -84,14 +84,14 @@ with qw(
     Starch::Store
 );
 
-sub BUILD {
+after BUILD => sub{
   my ($self) = @_;
 
   # Get this loaded as early as possible.
   $self->chi();
 
   return;
-}
+};
 
 =head1 REQUIRED ARGUMENTS
 
