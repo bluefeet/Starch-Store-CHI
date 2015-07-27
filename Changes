@@ -2,6 +2,8 @@ Revision history for Perl extension Starch::Store::CHI.
 
 {{$NEXT}}
 
+0.03 2015-07-27
+
  - Updated docs to recommend that CHI be configured to throw exceptions instead
    of logging them.
  - Properly extend the BUILD method.
