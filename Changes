@@ -1,6 +1,8 @@
-Revision history for Perl extension Starch::Store::CHI.
+Revision history for Perl extension Starch-Store-CHI.
 
 {{$NEXT}}
+
+ - Migrate build tooling from Dist::Zilla to Minilla.
 
 0.03 2015-07-27
 

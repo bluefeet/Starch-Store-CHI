@@ -1,5 +1,7 @@
 package Starch::Store::CHI;
 
+$Starch::Store::CHI::VERSION = '0.03';
+
 =head1 NAME
 
 Starch::Store::CHI - Starch storage backend using CHI.
