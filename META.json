@@ -45,7 +45,7 @@
             "CHI" : "0.58",
             "Moo" : "2",
             "Scalar::Util" : "0",
-            "Starch" : "0.05",
+            "Starch" : "0.1",
             "Type::Tiny" : "1.000005",
             "namespace::clean" : "0.24",
             "strictures" : "2"
@@ -53,8 +53,7 @@
       },
       "test" : {
          "requires" : {
-            "Test::Fatal" : "0",
-            "Test::Simple" : "0.96"
+            "Test2::V0" : "0.000094"
          }
       }
    },

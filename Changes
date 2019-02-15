@@ -2,6 +2,7 @@ Revision history for Perl extension Starch-Store-CHI.
 
 {{$NEXT}}
 
+ - Fix cpanfile for Test2::V0.
  - Migrate build tooling from Dist::Zilla to Minilla.
 
 0.03 2015-07-27
