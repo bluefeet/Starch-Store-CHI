@@ -43,12 +43,12 @@
       "runtime" : {
          "requires" : {
             "CHI" : "0.58",
-            "Moo" : "2",
+            "Moo" : "2.000000",
             "Scalar::Util" : "0",
-            "Starch" : "0.1",
+            "Starch" : "0.10",
             "Type::Tiny" : "1.000005",
             "namespace::clean" : "0.24",
-            "strictures" : "2"
+            "strictures" : "2.000000"
          }
       },
       "test" : {
