@@ -1,6 +1,6 @@
 package Starch::Store::CHI;
 
-$Starch::Store::CHI::VERSION = '0.04';
+our $VERSION = '0.04';
 
 =head1 NAME
 
