@@ -1,3 +1,4 @@
+requires 'perl' => '5.008001';
 requires 'Starch' => '0.10';
 requires 'CHI' => '0.58';
 requires 'strictures' => '2.000000';
