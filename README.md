@@ -88,7 +88,7 @@ Starch-Store-CHI GitHub issue tracker:
 
 [https://github.com/bluefeet/Starch-Store-CHI/issues](https://github.com/bluefeet/Starch-Store-CHI/issues)
 
-# AUTHOR
+# AUTHORS
 
 Aran Clary Deltac <bluefeet@gmail.com>
 
