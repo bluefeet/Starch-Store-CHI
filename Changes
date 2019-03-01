@@ -2,6 +2,7 @@ Revision history for Perl extension Starch-Store-CHI.
 
 {{$NEXT}}
 
+ - Remove typo Carp::Interal, which isn't necessary anyways.
  - Require perl 5.8.1.
  - Simplify VERSION declarations.
 
