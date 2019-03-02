@@ -1,7 +1,7 @@
 package Starch::Store::CHI;
 use 5.008001;
 use strictures 2;
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 
 =head1 NAME
 
